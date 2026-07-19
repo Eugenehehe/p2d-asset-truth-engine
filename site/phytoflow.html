@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="description" content="PhytoFlow is a plant-inspired resource allocation simulator for stress-memory-aware scheduling." />
+  <title>PhytoFlow Lab · P2D</title>
+  <link rel="stylesheet" href="phytoflow.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="back-link" href="index.html" aria-label="Back to P2D Asset Reconciliation">← P2D Asset Truth Engine</a>
+    <div class="top-actions">
+      <span class="status-dot"><i></i> Browser simulation</span>
+      <button id="languageToggle" class="ghost-button" type="button">English</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow" data-i18n="eyebrow">P2D EXPERIMENTAL LAB</p>
+        <h1>PhytoFlow</h1>
+        <p class="lead" data-i18n="lead">一個受植物資源調度啟發的軟體 MVP：用多時間尺度的壓力記憶、source–sink 配置、休眠與有序降級，降低記憶體壓力、資料搬運與工作失敗。</p>
+        <div class="principle-row">
+          <span data-i18n="principle1">壓力留下記憶</span>
+          <span data-i18n="principle2">資源流向高價值 sink</span>
+          <span data-i18n="principle3">危機時先休眠，不直接殺死</span>
+        </div>
+      </div>
+      <div class="hero-mark" aria-hidden="true">
+        <svg viewBox="0 0 220 220" role="img">
+          <defs>
+            <linearGradient id="leafGradient" x1="0" x2="1" y1="0" y2="1">
+              <stop offset="0" stop-color="#7ae3a1" />
+              <stop offset="1" stop-color="#12805a" />
+            </linearGradient>
+          </defs>
+          <path d="M111 185C104 127 114 78 161 38" fill="none" stroke="#d9ffea" stroke-width="8" stroke-linecap="round"/>
+          <path d="M152 42C101 43 78 73 79 115c46 4 76-20 73-73Z" fill="url(#leafGradient)"/>
+          <path d="M111 144C75 117 43 119 25 144c24 31 61 32 86 0Z" fill="#5bc986"/>
+          <circle cx="111" cy="184" r="13" fill="#d9ffea"/>
+          <circle cx="111" cy="184" r="5" fill="#157b58"/>
+        </svg>
+      </div>
+    </section>
+
+    <section class="control-panel" aria-labelledby="experiment-title">
+      <div>
+        <p class="eyebrow" data-i18n="experimentEyebrow">EXPERIMENT SETUP</p>
+        <h2 id="experiment-title" data-i18n="experimentTitle">建立同一批 workload，公平比較兩種排程策略</h2>
+        <p class="section-copy" data-i18n="experimentCopy">Baseline 只看當下負載；PhytoFlow 會保留壓力痕跡、預測重複尖峰、保留恢復空間，並優先把工作放在資料所在節點。</p>
+      </div>
+      <div class="controls-grid">
+        <label>
+          <span data-i18n="scenario">情境</span>
+          <select id="scenarioSelect">
+            <option value="daily-burst" data-i18n-option="dailyBurst">週期性 AI 推論尖峰</option>
+            <option value="mixed-etl" data-i18n-option="mixedEtl">即時 API + ETL 混合</option>
+            <option value="failure-recovery" data-i18n-option="failureRecovery">節點壓力與恢復</option>
+          </select>
+        </label>
+        <label>
+          <span data-i18n="clusterMemory">叢集記憶體</span>
+          <select id="memorySelect">
+            <option value="64">64 GB</option>
+            <option value="96" selected>96 GB</option>
+            <option value="128">128 GB</option>
+          </select>
+        </label>
+        <label>
+          <span data-i18n="intensity">工作負載強度</span>
+          <input id="intensityInput" type="range" min="70" max="140" value="110" step="5" />
+          <output id="intensityOutput">110%</output>
+        </label>
+        <label>
+          <span data-i18n="horizon">模擬時間</span>
+          <select id="horizonSelect">
+            <option value="120">120 min</option>
+            <option value="240" selected>240 min</option>
+            <option value="480">480 min</option>
+          </select>
+        </label>
+      </div>
+      <div class="button-row">
+        <button id="runSimulation" class="primary-button" type="button" data-i18n="run">執行比較實驗</button>
+        <button id="newSeed" class="secondary-button" type="button" data-i18n="newSeed">產生另一批 workload</button>
+        <span id="seedLabel" class="seed-label">Seed 260719</span>
+      </div>
+    </section>
+
+    <section class="results-section" aria-live="polite">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow" data-i18n="resultsEyebrow">MEASURED RESULTS</p>
+          <h2 data-i18n="resultsTitle">結果不是宣傳數字，而是同一 workload 的可重現模擬</h2>
+        </div>
+        <span id="runStatus" class="run-status" data-i18n="ready">Ready</span>
+      </div>
+
+      <div class="scorecards">
+        <article class="strategy-card baseline-card">
+          <div class="strategy-header">
+            <div>
+              <p class="eyebrow">BASELINE</p>
+              <h3>Least Loaded</h3>
+            </div>
+            <span class="strategy-badge" data-i18n="reactive">Reactive</span>
+          </div>
+          <div class="metric-list" id="baselineMetrics"></div>
+        </article>
+
+        <article class="strategy-card phyto-card">
+          <div class="strategy-header">
+            <div>
+              <p class="eyebrow">PLANT-INSPIRED</p>
+              <h3>PhytoFlow</h3>
+            </div>
+            <span class="strategy-badge good" data-i18n="adaptive">Adaptive</span>
+          </div>
+          <div class="metric-list" id="phytoMetrics"></div>
+        </article>
+
+        <article class="impact-card">
+          <p class="eyebrow" data-i18n="impactEyebrow">NET IMPACT</p>
+          <strong id="impactHeadline">—</strong>
+          <p id="impactNarrative" data-i18n="impactWaiting">執行模擬後，這裡會解釋改善來自哪一個機制。</p>
+          <div class="impact-bars" id="impactBars"></div>
+        </article>
+      </div>
+    </section>
+
+    <section class="dashboard-grid">
+      <article class="panel chart-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow" data-i18n="timelineEyebrow">PRESSURE TIMELINE</p>
+            <h3 data-i18n="timelineTitle">叢集記憶體壓力</h3>
+          </div>
+          <div class="legend">
+            <span><i class="baseline-line"></i>Least Loaded</span>
+            <span><i class="phyto-line"></i>PhytoFlow</span>
+            <span><i class="danger-line"></i>90%</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <canvas id="pressureChart" width="900" height="330"></canvas>
+        </div>
+      </article>
+
+      <article class="panel memory-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow" data-i18n="memoryEyebrow">STRESS MEMORY</p>
+            <h3 data-i18n="memoryTitle">PhytoFlow 最終記憶狀態</h3>
+          </div>
+        </div>
+        <div class="memory-layer-list">
+          <div class="memory-layer">
+            <div><span data-i18n="shortMemory">短期壓力記憶</span><strong id="shortMemoryValue">0%</strong></div>
+            <div class="memory-track"><i id="shortMemoryBar"></i></div>
+            <p data-i18n="shortMemoryCopy">最近幾分鐘的突發壓力，用於即時限流與 placement。</p>
+          </div>
+          <div class="memory-layer">
+            <div><span data-i18n="midMemory">中期重複模式</span><strong id="midMemoryValue">0%</strong></div>
+            <div class="memory-track"><i id="midMemoryBar"></i></div>
+            <p data-i18n="midMemoryCopy">數小時內重複 workload，影響預留容量與資料預置。</p>
+          </div>
+          <div class="memory-layer">
+            <div><span data-i18n="longMemory">長期政策痕跡</span><strong id="longMemoryValue">0%</strong></div>
+            <div class="memory-track"><i id="longMemoryBar"></i></div>
+            <p data-i18n="longMemoryCopy">累積失敗與高壓事件，逐步改變安全邊際。</p>
+          </div>
+        </div>
+        <div class="policy-box">
+          <span data-i18n="learnedPolicy">學到的政策</span>
+          <strong id="learnedPolicyValue" data-i18n="policyWaiting">尚未執行</strong>
+        </div>
+      </article>
+    </section>
+
+    <section class="dashboard-grid lower-grid">
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow" data-i18n="decisionEyebrow">DECISION TRACE</p>
+            <h3 data-i18n="decisionTitle">植物邏輯如何改變排程</h3>
+          </div>
+          <select id="decisionFilter" aria-label="Decision type filter">
+            <option value="all" data-i18n-option="allDecisions">全部決策</option>
+            <option value="reserve" data-i18n-option="reserve">預留</option>
+            <option value="locality" data-i18n-option="locality">資料就近</option>
+            <option value="hibernate" data-i18n-option="hibernate">休眠</option>
+            <option value="degrade" data-i18n-option="degrade">降級</option>
+          </select>
+        </div>
+        <div id="decisionLog" class="decision-log">
+          <p class="empty-state" data-i18n="decisionWaiting">執行模擬後顯示關鍵決策。</p>
+        </div>
+      </article>
+
+      <article class="panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow" data-i18n="workloadEyebrow">WORKLOAD SAMPLE</p>
+            <h3 data-i18n="workloadTitle">本次實驗中的代表性工作</h3>
+          </div>
+          <span id="workloadCount" class="count-pill">0 jobs</span>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th data-i18n="job">Job</th>
+                <th data-i18n="arrival">到達</th>
+                <th data-i18n="priority">優先級</th>
+                <th>RAM</th>
+                <th data-i18n="duration">時間</th>
+                <th data-i18n="dataHome">資料節點</th>
+              </tr>
+            </thead>
+            <tbody id="workloadTable"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+
+    <section class="architecture-section">
+      <div>
+        <p class="eyebrow" data-i18n="architectureEyebrow">SOFTWARE ARCHITECTURE</p>
+        <h2 data-i18n="architectureTitle">不是把植物名詞貼在排程器上，而是把機制變成可測試的狀態機</h2>
+      </div>
+      <div class="architecture-flow">
+        <div><span>1</span><strong>Telemetry</strong><small data-i18n="telemetry">使用率、等待、重複模式</small></div>
+        <b>→</b>
+        <div><span>2</span><strong>Stress Memory</strong><small data-i18n="stressMemory">短、中、長期痕跡</small></div>
+        <b>→</b>
+        <div><span>3</span><strong>Source–Sink Score</strong><small data-i18n="sourceSink">價值、緊急度、搬運成本</small></div>
+        <b>→</b>
+        <div><span>4</span><strong>Action</strong><small data-i18n="action">配置、限流、休眠、降級</small></div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>P2D PhytoFlow Lab</span>
+    <span data-i18n="footer">Synthetic workload only · No production infrastructure changes</span>
+  </footer>
+
+  <script src="phytoflow.js"></script>
+</body>
+</html>
