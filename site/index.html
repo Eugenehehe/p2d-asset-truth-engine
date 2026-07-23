@@ -10,32 +10,12 @@
 </head>
 <body>
 <header class="topbar">
-  <div>
-    <p class="eyebrow">P2D · Local browser workbench</p>
-    <h1>Asset Reconciliation</h1>
-    <p class="subtitle">Upload operational exports, map columns, reconcile Serial / Asset Tag / Bin / Rack / U / DNS, review exceptions, and export update-ready files.</p>
-  </div>
-  <div class="top-actions">
-    <a href="phytoflow.html" class="demo-pill" style="text-decoration:none">PhytoFlow Lab →</a>
-    <label class="language-control">Language<select id="languageSelect"><option value="en">English</option><option value="zh-TW">繁體中文</option></select></label>
-    <div class="demo-pill">Files stay in your browser</div>
-  </div>
+  <div><p class="eyebrow">P2D · Local browser workbench</p><h1>Asset Reconciliation</h1><p class="subtitle">Upload operational exports, map columns, reconcile Serial / Asset Tag / Bin / Rack / U / DNS, review exceptions, and export update-ready files.</p></div>
+  <div class="top-actions"><a href="phytoflow.html" class="demo-pill" style="text-decoration:none">PhytoFlow Lab →</a><label class="language-control">Language<select id="languageSelect"><option value="en">English</option><option value="zh-TW">繁體中文</option></select></label><div class="demo-pill">Files stay in your browser</div></div>
 </header>
 <main>
-  <section class="hero-card">
-    <div><h2>Practical workflow</h2><p><strong>Flowtrac is the baseline.</strong> Network discovery, physical audit, official status, and spare-storage files are supporting evidence. No data is uploaded to a server and this tool does not write back to Flowtrac.</p></div>
-    <button id="loadMock" class="secondary-button">Load mock example</button>
-  </section>
-
-  <nav class="tabs">
-    <button class="tab active" data-tab="upload">1. Upload & Map</button>
-    <button class="tab" data-tab="confidence">2. Confidence Model</button>
-    <button class="tab" data-tab="results">3. Results</button>
-    <button class="tab" data-tab="review">4. Review</button>
-    <button class="tab" data-tab="direct">5. Direct Network Export</button>
-    <button class="tab" data-tab="export">6. Export</button>
-  </nav>
-
+  <section class="hero-card"><div><h2>Practical workflow</h2><p><strong>Flowtrac is the baseline.</strong> Network discovery, physical audit, official status, and spare-storage files are supporting evidence. No data is uploaded to a server and this tool does not write back to Flowtrac.</p></div><button id="loadMock" class="secondary-button">Load mock example</button></section>
+  <nav class="tabs"><button class="tab active" data-tab="upload">1. Upload & Map</button><button class="tab" data-tab="confidence">2. Confidence Model</button><button class="tab" data-tab="results">3. Results</button><button class="tab" data-tab="review">4. Review</button><button class="tab" data-tab="direct">5. Direct Network Export</button><button class="tab" data-tab="export">6. Other Exports</button></nav>
   <section id="upload" class="tab-panel active">
     <div class="rules-grid">
       <article class="rule-card upload-card"><span>1</span><h3>Flowtrac baseline</h3><p>Required. CSV or XLSX export containing your current asset records.</p><input id="flowFile" type="file" accept=".csv,.xlsx,.xls" /><div id="flowStatus" class="muted"></div></article>
@@ -47,46 +27,12 @@
     </div>
     <article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Column mapper</p><h3>Confirm detected fields</h3><p class="muted">Only Serial is required in Flowtrac. Map evidence dates when available so freshness can affect confidence.</p></div></div><div id="mappingArea" class="mapping-area"><p class="muted">Upload a file or load the mock example to create mappings.</p></div></article>
   </section>
-
-  <section id="confidence" class="tab-panel">
-    <article class="panel-card">
-      <div class="panel-heading wrap"><div><p class="eyebrow">Field-specific evidence hierarchy</p><h3>Confidence weights</h3><p class="muted">A source does not have one universal rank. Its weight depends on the field being decided.</p></div><button id="resetWeights" class="secondary-button">Reset default weights</button></div>
-      <div class="weight-table-wrap"><table id="weightTable"></table></div>
-    </article>
-    <div class="two-column">
-      <article class="panel-card"><p class="eyebrow">Freshness decay</p><h3>Evidence age factor</h3><div id="freshnessTable"></div></article>
-      <article class="panel-card"><p class="eyebrow">Decision controls</p><h3>Confidence thresholds</h3><div class="threshold-grid"><label>High confidence<input id="highThreshold" type="number" min="0" max="100" step="1" /></label><label>Medium confidence<input id="mediumThreshold" type="number" min="0" max="100" step="1" /></label></div><p class="muted">Conflict overrides can still force manual review even when a score is high.</p></article>
-    </div>
-    <article class="principle-card"><p class="eyebrow">Core principle</p><h3>Physical is Tier 1 for location. Network is Tier 1 for online state. myAssets is Tier 1 for official lifecycle status.</h3><p>The exported decision trace records the winning source, evidence tier, raw weight, freshness factor, effective score, supporting score, conflicting score, and override reason.</p></article>
-  </section>
-
-  <section id="results" class="tab-panel">
-    <div class="metric-grid"><article class="metric-card"><span>Flowtrac records</span><strong id="mTotal">0</strong></article><article class="metric-card"><span>Update candidates</span><strong id="mUpdates">0</strong></article><article class="metric-card"><span>Manual review</span><strong id="mReview">0</strong></article><article class="metric-card"><span>Unmatched evidence</span><strong id="mUnmatched">0</strong></article></div>
-    <article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Exception queue</p><h3>Reconciliation results</h3></div><div class="filters"><label>Queue<select id="queueFilter"><option value="ALL">All</option><option value="UPDATE">Update candidates</option><option value="REVIEW">Manual review</option><option value="NO CHANGE">No change</option></select></label><label>Search<input id="resultSearch" type="search" placeholder="Serial, asset tag, Bin…" /></label></div></div><div class="table-wrap"><table id="resultTable"></table></div></article>
-  </section>
-
+  <section id="confidence" class="tab-panel"><article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Field-specific evidence hierarchy</p><h3>Confidence weights</h3><p class="muted">A source does not have one universal rank. Its weight depends on the field being decided.</p></div><button id="resetWeights" class="secondary-button">Reset default weights</button></div><div class="weight-table-wrap"><table id="weightTable"></table></div></article><div class="two-column"><article class="panel-card"><p class="eyebrow">Freshness decay</p><h3>Evidence age factor</h3><div id="freshnessTable"></div></article><article class="panel-card"><p class="eyebrow">Decision controls</p><h3>Confidence thresholds</h3><div class="threshold-grid"><label>High confidence<input id="highThreshold" type="number" min="0" max="100" step="1" /></label><label>Medium confidence<input id="mediumThreshold" type="number" min="0" max="100" step="1" /></label></div><p class="muted">Conflict overrides can still force manual review even when a score is high.</p></article></div><article class="principle-card"><p class="eyebrow">Core principle</p><h3>Physical is Tier 1 for location. Network is Tier 1 for online state. myAssets is Tier 1 for official lifecycle status.</h3><p>The exported decision trace records the winning source, evidence tier, raw weight, freshness factor, effective score, supporting score, conflicting score, and override reason.</p></article></section>
+  <section id="results" class="tab-panel"><div class="metric-grid"><article class="metric-card"><span>Flowtrac records</span><strong id="mTotal">0</strong></article><article class="metric-card"><span>Update candidates</span><strong id="mUpdates">0</strong></article><article class="metric-card"><span>Manual review</span><strong id="mReview">0</strong></article><article class="metric-card"><span>Unmatched evidence</span><strong id="mUnmatched">0</strong></article></div><article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Exception queue</p><h3>Reconciliation results</h3></div><div class="filters"><label>Queue<select id="queueFilter"><option value="ALL">All</option><option value="UPDATE">Update candidates</option><option value="REVIEW">Manual review</option><option value="NO CHANGE">No change</option></select></label><label>Search<input id="resultSearch" type="search" placeholder="Serial, asset tag, Bin…" /></label></div></div><div class="table-wrap"><table id="resultTable"></table></div></article></section>
   <section id="review" class="tab-panel"><article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Human approval</p><h3>Review and annotate</h3><p class="muted">Approve only after checking the source evidence. Notes are preserved in exports.</p></div><button id="approvePhysical" class="primary-button">Approve physical high-confidence updates</button></div><div class="table-wrap"><table id="reviewTable"></table></div></article></section>
-
-  <section id="direct" class="tab-panel">
-    <article class="panel-card">
-      <div class="panel-heading wrap">
-        <div><p class="eyebrow">Current operational need</p><h3>Validated Flowtrac vs Network Discovery comparison</h3><p class="muted">This mode ignores confidence. DNS-derived locations must resolve to exactly one existing Flowtrac Bin before they can enter the update template.</p></div>
-        <div class="direct-controls"><label>To Warehouse<input id="directWarehouse" value="UFIT" /></label><button id="runDirectCompare" class="primary-button">Compare and validate</button></div>
-      </div>
-      <article class="inset-card bin-master-card"><h4>Flowtrac existing-bin master</h4><p class="muted">Upload the complete Flowtrac Bin export. The tool detects the Bin column and validates each DNS-derived building/room against the full Bin name.</p><input id="binsFile" type="file" accept=".csv,.xlsx,.xls" /><div id="binsStatus" class="muted"></div></article>
-      <div class="notice-card"><strong>Validation rule:</strong> exactly one master-bin match is required. Missing, unparseable, or ambiguous DNS locations are excluded from the import sheet.</div>
-      <div class="metric-grid direct-metrics"><article class="metric-card"><span>Validated Bin updates</span><strong id="directCount">0</strong></article><article class="metric-card"><span>Unmatched DNS Bins</span><strong id="unresolvedCount">0</strong></article></div>
-      <h4>Validated updates</h4><div class="table-wrap"><table id="directTable"></table></div>
-      <h4 class="section-gap">Unmatched or ambiguous DNS Bins</h4><div class="table-wrap"><table id="unresolvedTable"></table></div>
-      <div class="direct-export-bar"><button id="exportFlowtracTemplate" class="primary-button">Export validated XLSX workbook</button></div>
-    </article>
-  </section>
-
+  <section id="direct" class="tab-panel"><article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Current operational need</p><h3>Validated Flowtrac vs Network Discovery comparison</h3><p class="muted">This mode ignores confidence. DNS-derived locations must resolve to exactly one existing Flowtrac Bin before they can enter the update template.</p></div><div class="direct-controls"><label>To Warehouse<input id="directWarehouse" value="UFIT" /></label><button id="runDirectCompare" class="primary-button">Compare and validate</button></div></div><article class="inset-card bin-master-card"><h4>Flowtrac existing-bin master</h4><p class="muted">Upload the complete Flowtrac Bin export. The tool detects the Bin column and validates each DNS-derived building/room against the full Bin name.</p><input id="binsFile" type="file" accept=".csv,.xlsx,.xls" /><div id="binsStatus" class="muted"></div></article><div id="directRunStatus" class="run-status muted">Waiting for Flowtrac, Network Discovery, and Bin master files.</div><div class="notice-card"><strong>Validation rule:</strong> exactly one master-bin match is required. Missing, unparseable, or ambiguous DNS locations are excluded from the import sheet.</div><div class="metric-grid direct-metrics"><article class="metric-card"><span>Validated Bin updates</span><strong id="directCount">0</strong></article><article class="metric-card"><span>Unmatched DNS Bins</span><strong id="unresolvedCount">0</strong></article></div><h4>Validated updates</h4><div class="table-wrap"><table id="directTable"></table></div><h4 class="section-gap">Unmatched or ambiguous DNS Bins</h4><div class="table-wrap"><table id="unresolvedTable"></table></div><div class="direct-export-bar"><button id="exportFlowtracTemplate" class="primary-button">Export validated XLSX workbook</button></div></article></section>
   <section id="export" class="tab-panel"><div class="export-grid"><article class="export-card"><h3>Full decision trace</h3><p>Every Flowtrac record, joined evidence, weighted confidence, conflicts, recommendation, and reviewer note.</p><button class="primary-button" data-export="all">Download CSV</button></article><article class="export-card"><h3>Approved updates</h3><p>Only records explicitly approved by the reviewer.</p><button class="primary-button" data-export="approved">Download CSV</button></article><article class="export-card"><h3>Manual review queue</h3><p>Conflicts, missing identifiers, and insufficient-evidence cases.</p><button class="primary-button" data-export="review">Download CSV</button></article><article class="export-card"><h3>Unmatched evidence</h3><p>Network, physical, or spare records whose normalized serial did not match Flowtrac.</p><button class="primary-button" data-export="unmatched">Download CSV</button></article></div></section>
 </main>
 <footer><p>P2D Asset Reconciliation Workbench · Local processing · No automatic production updates</p></footer>
-<script src="app.js"></script>
-<script src="direct-mode.js"></script>
-<script src="i18n.js"></script>
-</body>
-</html>
+<script src="app.js"></script><script src="direct-mode.js"></script><script src="i18n.js"></script>
+</body></html>
