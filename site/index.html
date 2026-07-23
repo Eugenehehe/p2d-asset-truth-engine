@@ -70,13 +70,15 @@
   <section id="direct" class="tab-panel">
     <article class="panel-card">
       <div class="panel-heading wrap">
-        <div><p class="eyebrow">Current operational need</p><h3>Direct Flowtrac vs Network Discovery comparison</h3><p class="muted">This mode ignores confidence, physical audit, myAssets, and spare-storage evidence. It compares the current Flowtrac Bin with the Bin parsed from Network Discovery DNS.</p></div>
-        <div class="direct-controls"><label>To Warehouse<input id="directWarehouse" value="UFIT" /></label><button id="runDirectCompare" class="primary-button">Compare now</button></div>
+        <div><p class="eyebrow">Current operational need</p><h3>Validated Flowtrac vs Network Discovery comparison</h3><p class="muted">This mode ignores confidence. DNS-derived locations must resolve to exactly one existing Flowtrac Bin before they can enter the update template.</p></div>
+        <div class="direct-controls"><label>To Warehouse<input id="directWarehouse" value="UFIT" /></label><button id="runDirectCompare" class="primary-button">Compare and validate</button></div>
       </div>
-      <div class="notice-card"><strong>Safety check:</strong> only rows with a nonblank Network-derived Bin different from Flowtrac are shown. Review the selected rows before export.</div>
-      <div class="metric-grid direct-metrics"><article class="metric-card"><span>Different Bins found</span><strong id="directCount">0</strong></article></div>
-      <div class="table-wrap"><table id="directTable"></table></div>
-      <div class="direct-export-bar"><button id="exportFlowtracTemplate" class="primary-button">Export Flowtrac Bin Update Template</button></div>
+      <article class="inset-card bin-master-card"><h4>Flowtrac existing-bin master</h4><p class="muted">Upload the complete Flowtrac Bin export. The tool detects the Bin column and validates each DNS-derived building/room against the full Bin name.</p><input id="binsFile" type="file" accept=".csv,.xlsx,.xls" /><div id="binsStatus" class="muted"></div></article>
+      <div class="notice-card"><strong>Validation rule:</strong> exactly one master-bin match is required. Missing, unparseable, or ambiguous DNS locations are excluded from the import sheet.</div>
+      <div class="metric-grid direct-metrics"><article class="metric-card"><span>Validated Bin updates</span><strong id="directCount">0</strong></article><article class="metric-card"><span>Unmatched DNS Bins</span><strong id="unresolvedCount">0</strong></article></div>
+      <h4>Validated updates</h4><div class="table-wrap"><table id="directTable"></table></div>
+      <h4 class="section-gap">Unmatched or ambiguous DNS Bins</h4><div class="table-wrap"><table id="unresolvedTable"></table></div>
+      <div class="direct-export-bar"><button id="exportFlowtracTemplate" class="primary-button">Export validated XLSX workbook</button></div>
     </article>
   </section>
 
