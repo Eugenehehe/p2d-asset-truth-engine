@@ -32,7 +32,8 @@
     <button class="tab" data-tab="confidence">2. Confidence Model</button>
     <button class="tab" data-tab="results">3. Results</button>
     <button class="tab" data-tab="review">4. Review</button>
-    <button class="tab" data-tab="export">5. Export</button>
+    <button class="tab" data-tab="direct">5. Direct Network Export</button>
+    <button class="tab" data-tab="export">6. Export</button>
   </nav>
 
   <section id="upload" class="tab-panel active">
@@ -66,10 +67,24 @@
 
   <section id="review" class="tab-panel"><article class="panel-card"><div class="panel-heading wrap"><div><p class="eyebrow">Human approval</p><h3>Review and annotate</h3><p class="muted">Approve only after checking the source evidence. Notes are preserved in exports.</p></div><button id="approvePhysical" class="primary-button">Approve physical high-confidence updates</button></div><div class="table-wrap"><table id="reviewTable"></table></div></article></section>
 
+  <section id="direct" class="tab-panel">
+    <article class="panel-card">
+      <div class="panel-heading wrap">
+        <div><p class="eyebrow">Current operational need</p><h3>Direct Flowtrac vs Network Discovery comparison</h3><p class="muted">This mode ignores confidence, physical audit, myAssets, and spare-storage evidence. It compares the current Flowtrac Bin with the Bin parsed from Network Discovery DNS.</p></div>
+        <div class="direct-controls"><label>To Warehouse<input id="directWarehouse" value="UFIT" /></label><button id="runDirectCompare" class="primary-button">Compare now</button></div>
+      </div>
+      <div class="notice-card"><strong>Safety check:</strong> only rows with a nonblank Network-derived Bin different from Flowtrac are shown. Review the selected rows before export.</div>
+      <div class="metric-grid direct-metrics"><article class="metric-card"><span>Different Bins found</span><strong id="directCount">0</strong></article></div>
+      <div class="table-wrap"><table id="directTable"></table></div>
+      <div class="direct-export-bar"><button id="exportFlowtracTemplate" class="primary-button">Export Flowtrac Bin Update Template</button></div>
+    </article>
+  </section>
+
   <section id="export" class="tab-panel"><div class="export-grid"><article class="export-card"><h3>Full decision trace</h3><p>Every Flowtrac record, joined evidence, weighted confidence, conflicts, recommendation, and reviewer note.</p><button class="primary-button" data-export="all">Download CSV</button></article><article class="export-card"><h3>Approved updates</h3><p>Only records explicitly approved by the reviewer.</p><button class="primary-button" data-export="approved">Download CSV</button></article><article class="export-card"><h3>Manual review queue</h3><p>Conflicts, missing identifiers, and insufficient-evidence cases.</p><button class="primary-button" data-export="review">Download CSV</button></article><article class="export-card"><h3>Unmatched evidence</h3><p>Network, physical, or spare records whose normalized serial did not match Flowtrac.</p><button class="primary-button" data-export="unmatched">Download CSV</button></article></div></section>
 </main>
 <footer><p>P2D Asset Reconciliation Workbench · Local processing · No automatic production updates</p></footer>
 <script src="app.js"></script>
+<script src="direct-mode.js"></script>
 <script src="i18n.js"></script>
 </body>
 </html>
